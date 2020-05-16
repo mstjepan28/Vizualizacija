@@ -60,7 +60,7 @@
     
     d3.queue()
       .defer(d3.json, "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson")  // World shape
-      .defer(d3.csv, "../Data/COVID-19_Data.csv") // Position of circles
+      .defer(d3.csv, "https://raw.githubusercontent.com/mstjepan28/Vizualizacija/master/Data/COVID-19_Data.csv") // Position of circles
       .await(ready);
     
     function ready(error, dataGeo, data) {

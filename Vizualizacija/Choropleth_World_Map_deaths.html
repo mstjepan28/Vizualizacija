@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Choropleth Grapf - Deaths</title>
 
-    <script src="http://d3js.org/d3.v4.js"></script>
+    <script src="https://d3js.org/d3.v4.js"></script>
     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
     <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
 
@@ -68,7 +68,7 @@
   // Load external data and boot
   d3.queue()
     .defer(d3.json, "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson")
-    .defer(d3.csv, "../Data/COVID-19_Data.csv", function(d) { data.set(d.code, +d.n1); })
+    .defer(d3.csv, "https://raw.githubusercontent.com/mstjepan28/Vizualizacija/master/Data/COVID-19_Data.csv", function(d) { data.set(d.code, +d.n1); })
     .await(ready);
     
   function ready(error, topo) {
