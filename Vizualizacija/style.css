@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Asap&display=swap');
+
+body{
+    text-align: center;
+    font-family: 'Asap', sans-serif;
+}
+svg{
+    display: inline-block;
+    margin: 2% 0;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+a.current{
+    font-weight: bold;
+    text-decoration: underline;
+}
