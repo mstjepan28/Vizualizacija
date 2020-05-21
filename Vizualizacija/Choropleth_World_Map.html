@@ -13,15 +13,16 @@
 </head>
 <body>
     <header>
-        <h1>COVID-19 World wide cases</h1>
-        <h4>Choropleth Grapf - Cases</h4>     
+        <h1>COVID-19 Slučajevi u svijetu</h1>
+        <h4>Choropleth Graf - Slučajevi</h4>     
     </header>
     
     <hr>
     <nav>
         <div class="links">
-            <a href="index.html">Bubble graph</a> |
-            <a href="#" class="current">Choropleth graph</a>     
+            <a href="index.html">Mjehuričast graf</a> |
+            <a class="current">Choropleth graf</a> |  
+            <a href="Area_chart.html">Area graf</a>  
         </div>
     </nav>
     
@@ -31,8 +32,8 @@
     <hr>
     <nav>
       <div>
-        <a href="#" class="current">Cases</a> |
-        <a href="Choropleth_World_Map_deaths.html">Deaths</a>          
+        <a class="current">Slučajevi</a> |
+        <a href="Choropleth_World_Map_deaths.html">Smrti</a>          
       </div>
     </nav>
 
@@ -72,7 +73,6 @@
     .await(ready);
     
   function ready(error, topo) {
-    console.log(data)
 
     let mouseOver = function(d) {
       d3.selectAll(".Country")

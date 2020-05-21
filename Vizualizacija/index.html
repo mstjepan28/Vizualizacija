@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bubble Grapf - Cases</title>
+    <title>Mjehuričast graf - Slučajevi</title>
 
     <script src="https://d3js.org/d3.v4.js"></script>
     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
@@ -13,15 +13,16 @@
 </head>
 <body>
     <header>
-        <h1>COVID-19 World wide cases</h1>
-        <h4>Bubble Grapf - Cases</h4>           
+        <h1>COVID-19 Slučajevi u svijetu</h1>
+        <h4>Mjehuričast graf - Cases</h4>           
     </header>
     
     <hr>
     <nav>
         <div class="links">
-            <a href="#" class="current">Bubble graph</a> |
-            <a href="Choropleth_World_Map.html">Choropleth graph</a>     
+            <a class="current">Mjehuričast graf</a> |
+            <a href="Choropleth_World_Map.html">Choropleth graf</a> |  
+            <a href="Area_chart.html">Area chart</a>   
         </div>
     </nav>
     
@@ -31,8 +32,8 @@
     <hr>
     <nav>
       <div>
-          <a href="#" class="current">Cases</a> |
-          <a href="index_deaths.html">Deaths</a>         
+          <a class="current">Slučajevi</a> |
+          <a href="index_deaths.html">Smrti</a>         
       </div>
     </nav>
 
@@ -64,7 +65,6 @@
       .await(ready);
     
     function ready(error, dataGeo, data) {
-      console.log(data)
       // Create a color scale
       var allContinent = d3.map(data, function(d){return(d.Country)}).keys()
       var color = d3.scaleOrdinal()
@@ -114,7 +114,7 @@
           .attr("x", width - 10)
           .attr("y", height - 30)
           .attr("width", 90)
-          .html("COVID-19 Cases")
+          .html("COVID-19 Slučajevi")
           .style("font-size", 14)
     
     

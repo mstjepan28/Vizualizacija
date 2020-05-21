@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graf područja - Smrti</title>
+
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>COVID-19 Slučajevi u svijetu</h1>
+        <h4>Graf područja - Smrti</h4>     
+    </header>
+    
+    <hr>
+    <nav>
+        <div class="links">
+            <a href="index.html">Mjehuričast graf</a> |
+            <a href="Choropleth_World_Map.html">Choropleth graf</a> |
+            <a class="current">Graf područja</a>  
+        </div>
+    </nav>
+    
+    <hr>
+    <div id="my_dataviz"></div>
+
+    <hr>
+    <nav>
+      <div>
+        <a href="Area_chart.html">Slučajevi</a> |
+        <a class="current">Smrti</a>          
+      </div>
+    </nav>
+
+    <hr>
+    <footer>
+        <p>
+            Vizualizacija podataka o slučajevima COVID-19 virusa u svijetu <br>
+            Izradili: Kristijan Krulić, Filip Ožbolt i Stjepan Markovčić
+        </p>
+    </footer>
+</body>
+</html>
+
+<script>
+  // DIMENZIJE GRAFA //
+  var margina = {gore: 10, desno: 30, dolje: 30, lijevo: 60},
+      sirina = 800 - margina.lijevo - margina.desno,
+      visina = 400 - margina.gore - margina.dolje;
+  
+  // DODAJ GRAF NA STRANICU // 
+  var svg = d3.select("#my_dataviz")
+    .append("svg")
+      .attr("width", sirina + margina.lijevo + margina.desno)
+      .attr("height", visina + margina.gore + margina.dolje)
+    .append("g")
+      .attr("transform",
+            "translate(" + margina.lijevo + "," + margina.gore + ")");
+  
+  // CITANJE PODATAKA
+  d3.csv("https://raw.githubusercontent.com/mstjepan28/Vizualizacija/master/Data/COVID-19_Data_2.csv",
+  
+    // When reading the csv, I must format variables:
+    function(d){
+      return { datum : d3.timeParse("%Y-%m-%d")(d.datum), smrti : d.smrti }
+    },
+    function(data) {
+      // X - DATUM //
+      var x = d3.scaleTime()
+        .domain(d3.extent(data, function(d) { return d.datum; }))
+        .range([ 0, sirina ]);
+      xAxis = svg.append("g")
+        .attr("transform", "translate(0," + visina + ")")
+        .call(d3.axisBottom(x));
+  
+      // Y - VRIJEDNOSTI //
+      var y = d3.scaleLinear()
+        .domain([0, d3.max(data, function(d) { return +d.smrti; })])
+        .range([ visina, 0 ]);
+      yAxis = svg.append("g")
+        .call(d3.axisLeft(y));
+  
+      // Add a clipPath: everything out of this area won't be drawn.
+      var clip = svg.append("defs").append("svg:clipPath")
+          .attr("id", "clip")
+          .append("svg:rect")
+          .attr("width", sirina )
+          .attr("height", visina )
+          .attr("x", 0)
+          .attr("y", 0);
+  
+      // Add brushing
+      var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
+          .extent( [ [0,0], [sirina,visina] ] )  // initialise the brush area: start at 0,0 and finishes at width,visina: it means I select the whole graph area
+          .on("end", updateChart)               // Each time the brush selection changes, trigger the 'updateChart' function
+  
+      // Create the area variable: where both the area and the brush take place
+      var area = svg.append('g')
+        .attr("clip-path", "url(#clip)")
+  
+      // Create an area generator
+      var areaGenerator = d3.area()
+        .x(function(d) { return x(d.datum) })
+        .y0(y(0))
+        .y1(function(d) { return y(d.smrti) })
+  
+      // Add the area
+      area.append("path")
+        .datum(data)
+        .attr("class", "myArea")  // I add the class myArea to be able to modify it later on.
+        .attr("fill", "#69b3a2")
+        .attr("fill-opacity", .3)
+        .attr("stroke", "black")
+        .attr("stroke-width", 1)
+        .attr("d", areaGenerator )
+  
+      // Add the brushing
+      area
+        .append("g")
+          .attr("class", "brush")
+          .call(brush);
+  
+      // A function that set idleTimeOut to null
+      var idleTimeout
+      function idled() { idleTimeout = null; }
+  
+      // A function that update the chart for given boundaries
+      function updateChart() {
+  
+        // What are the selected boundaries?
+        extent = d3.event.selection
+  
+        // If no selection, back to initial coordinate. Otherwise, update X axis domain
+        if(!extent){
+          if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
+          x.domain([ 4,8])
+        }else{
+          x.domain([ x.invert(extent[0]), x.invert(extent[1]) ])
+          area.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
+        }
+  
+        // Update axis and area position
+        xAxis.transition().duration(1000).call(d3.axisBottom(x))
+        area
+            .select('.myArea')
+            .transition()
+            .duration(1000)
+            .attr("d", areaGenerator)
+      }
+  
+      // DOUBLE-CLICK VRACA POCETNI GRAF
+      svg.on("dblclick",function(){
+        x.domain(d3.extent(data, function(d) { return d.datum; }))
+        xAxis.transition().call(d3.axisBottom(x))
+        area
+          .select('.myArea')
+          .transition()
+          .attr("d", areaGenerator)
+      });
+  
+  })
+</script>
