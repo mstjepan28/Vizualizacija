@@ -63,7 +63,7 @@
   // Data and color scale
   var data = d3.map();
   var colorScale = d3.scaleThreshold()
-    .domain([10, 100, 1000, 3000, 10000, 50000]) //Promjenjenog - ako su vece brojke to je osjetljivost na podatke manja
+    .domain([100, 1000, 10000, 50000, 100000]) //Promjenjenog - ako su vece brojke to je osjetljivost na podatke manja
     .range(d3.schemeBlues[7]);
 
   // Load external data and boot
